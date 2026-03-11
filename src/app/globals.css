@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-noto: 'Noto Sans KR', sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: var(--font-noto), sans-serif; }
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #e9ecef; border-radius: 2px; }
+}
+
+@layer components {
+  /* 모바일 앱 컨테이너 */
+  .app-container {
+    @apply max-w-[480px] mx-auto bg-white min-h-screen relative overflow-hidden;
+    box-shadow: 0 0 0 1px #e9ecef, 0 8px 40px rgba(0,0,0,.12);
+  }
+
+  /* 바텀 시트 */
+  .bottom-sheet {
+    @apply fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px]
+           bg-white rounded-t-2xl shadow-2xl z-50
+           transition-transform duration-300;
+  }
+
+  /* 그린 프라이머리 버튼 */
+  .btn-primary {
+    @apply w-full py-4 rounded-xl bg-green-600 text-white font-bold text-[15px]
+           transition-all active:scale-[.98] hover:bg-green-700 disabled:bg-gray-200
+           disabled:text-gray-400 disabled:cursor-not-allowed;
+  }
+
+  /* 아웃라인 버튼 */
+  .btn-outline {
+    @apply w-full py-[13px] rounded-xl border border-gray-200 text-gray-600
+           font-semibold text-sm bg-white transition-all hover:bg-gray-50;
+  }
+
+  /* 폼 인풋 */
+  .form-input {
+    @apply w-full px-[14px] py-3 rounded-xl border border-gray-200 text-[15px]
+           text-gray-900 bg-white outline-none transition-all
+           focus:border-green-500 focus:ring-2 focus:ring-green-500/10;
+  }
+
+  /* 섹션 레이블 */
+  .section-label {
+    @apply text-xs font-semibold text-gray-400 uppercase tracking-widest my-4;
+  }
+
+  /* 가격 텍스트 */
+  .price-current { @apply text-base font-bold text-green-600; }
+  .price-original { @apply text-xs text-gray-400 line-through; }
+
+  /* 할인 배지 */
+  .badge-discount {
+    @apply px-1.5 py-0.5 rounded text-[11px] font-semibold
+           bg-green-100 text-green-700;
+  }
+
+  /* 상태 뱃지 */
+  .badge-reserved { @apply px-2 py-0.5 rounded-full text-xs font-semibold bg-green-50 text-green-700; }
+  .badge-no-show  { @apply px-2 py-0.5 rounded-full text-xs font-semibold bg-red-50 text-red-500; }
+  .badge-manager  { @apply px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-500; }
+  .badge-user     { @apply px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-600; }
+}
+
+/* 깜빡이는 라이브 표시 */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+.blink { animation: blink 1.4s ease-in-out infinite; }
+
+/* 가격 티커 애니메이션 */
+@keyframes ticker-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.ticker-in { animation: ticker-in .3s ease-out; }
