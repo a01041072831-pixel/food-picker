@@ -42,10 +42,15 @@ export async function middleware(request: NextRequest) {
     return response
   }
 
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { user }, error: userError } = await supabase.auth.getUser()
+
+  if (userError) {
+    console.error('[middleware] getUser error:', userError.message, 'path:', pathname)
+  }
 
   // 비로그인 → 로그인 페이지
   if (!user) {
+    console.log('[middleware] no user, redirecting to login from:', pathname)
     const loginUrl = new URL('/login', request.url)
     loginUrl.searchParams.set('redirectTo', pathname)
     return NextResponse.redirect(loginUrl)

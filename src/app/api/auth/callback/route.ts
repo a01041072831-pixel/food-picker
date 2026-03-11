@@ -7,7 +7,11 @@ export async function GET(request: NextRequest) {
   const code = searchParams.get('code')
   const next = searchParams.get('next') ?? '/home'
 
+  console.log('[callback] origin:', origin, 'code exists:', !!code)
+  console.log('[callback] SUPABASE_URL exists:', !!process.env.NEXT_PUBLIC_SUPABASE_URL)
+
   if (!code) {
+    console.error('[callback] no code param')
     return NextResponse.redirect(`${origin}/login?error=auth_failed`)
   }
 
@@ -34,12 +38,14 @@ export async function GET(request: NextRequest) {
   const { error } = await supabase.auth.exchangeCodeForSession(code)
 
   if (error) {
-    console.error('exchangeCodeForSession error:', error.message)
-    return NextResponse.redirect(`${origin}/login?error=auth_failed`)
+    console.error('[callback] exchangeCodeForSession error:', error.message, error.status)
+    return NextResponse.redirect(`${origin}/login?error=auth_failed&msg=${encodeURIComponent(error.message)}`)
   }
 
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { user }, error: userError } = await supabase.auth.getUser()
+  console.log('[callback] getUser result:', user?.id, userError?.message)
   if (!user) {
+    console.error('[callback] no user after exchange')
     return NextResponse.redirect(`${origin}/login?error=auth_failed`)
   }
 
