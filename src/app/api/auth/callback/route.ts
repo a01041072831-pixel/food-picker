@@ -45,8 +45,8 @@ export async function GET(request: NextRequest) {
   const { data: { user }, error: userError } = await supabase.auth.getUser()
   console.log('[callback] getUser result:', user?.id, userError?.message)
   if (!user) {
-    console.error('[callback] no user after exchange')
-    return NextResponse.redirect(`${origin}/login?error=auth_failed`)
+    console.error('[callback] no user after exchange, userError:', userError?.message)
+    return NextResponse.redirect(`${origin}/login?error=auth_failed&msg=${encodeURIComponent('no_user:' + (userError?.message ?? 'unknown'))}`)
   }
 
   const { data: profile } = await supabase
